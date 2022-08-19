@@ -1,0 +1,18 @@
+{
+  "resources":{
+  "includes":[
+    {
+      "pattern":"\\Qapplication.properties\\E"
+    }, 
+    {
+      "pattern":"\\Qcom/julien/saevecke/sul/sulnative/\\E"
+    }, 
+    {
+      "pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"
+    }, 
+    {
+      "pattern":"\\Qrabbitmq-amqp-client.properties\\E"
+    }
+  ]},
+  "bundles":[]
+}

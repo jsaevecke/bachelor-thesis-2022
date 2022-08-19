@@ -1,0 +1,21 @@
+{
+  "resources":{
+  "includes":[
+    {
+      "pattern":"\\QMETA-INF/services/net.automatalib.AutomataLibSettingsSource\\E"
+    }, 
+    {
+      "pattern":"\\Qapplication.properties\\E"
+    }, 
+    {
+      "pattern":"\\Qcom/julien/saevecke/learnergraalvm/\\E"
+    }, 
+    {
+      "pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"
+    }, 
+    {
+      "pattern":"\\Qrabbitmq-amqp-client.properties\\E"
+    }
+  ]},
+  "bundles":[]
+}

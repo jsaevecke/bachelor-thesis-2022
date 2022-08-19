@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sul
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq-secret
+  namespace: sul
+type: Opaque
+data:
+  RABBIT_USERNAME: Z3Vlc3Q= #guest
+  RABBIT_PASSWORD: Z3Vlc3Q= #guest
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: coffee-sul-native
+  namespace: sul
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      containers:
+        - name: coffee-sul-native
+          image: pixian/sul:coffee-spring-native-graalvm
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 50m
+              memory: 50Mi
+          ports:
+            - containerPort: 80
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: SPRING_RABBITMQ_HOST
+              value: "mu-rabbit-rabbitmq.rabbit.svc.cluster.local"
+            - name: SPRING_RABBITMQ_PORT
+              value: "5672"
+            - name: SPRING_RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: RABBIT_USERNAME
+            - name: SPRING_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: RABBIT_PASSWORD
+      restartPolicy: Never
+  backoffLimit: 0

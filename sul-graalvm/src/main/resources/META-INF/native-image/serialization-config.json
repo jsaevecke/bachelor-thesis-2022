@@ -1,0 +1,15 @@
+{
+  "types":[
+    {
+      "name":"com.julien.saevecke.shared.messages.MembershipQuery"
+    },
+    {
+      "name":"java.lang.String"
+    },
+    {
+      "name":"java.util.ArrayList"
+    }
+  ],
+  "lambdaCapturingTypes":[
+  ]
+}
