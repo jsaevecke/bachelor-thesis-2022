@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  learner_spring_adoptopenjdk_11_jre_alpine:
+    build:
+      context: ./learner-jvm
+      dockerfile: ./../resources/dockerfiles/sul/Dockerfile_176mb
+    image: pixian/learner:spring-adoptopenjdk-11-jre-alpine
+  sul_coffee_spring_adoptopenjdk_11_jre_alpine:
+    build:
+      context: ./sul-jvm
+      dockerfile: ./../resources/dockerfiles/sul/Dockerfile_176mb
+    image: pixian/sul:coffee-spring-adoptopenjdk-11-jre-alpine
+  sul_coffee_spring_openjdk-11-jre-slim-buster:
+    build:
+      context: ./sul-jvm
+      dockerfile: ./../resources/dockerfiles/sul/Dockerfile_243mb
+    image: pixian/sul:coffee-spring-openjdk-11-jre-slim-buster
+  sul_coffee_spring_openjdk-11-jre-slim:
+    build:
+      context: ./sul-jvm
+      dockerfile: ./../resources/dockerfiles/sul/Dockerfile_250mb
+    image: pixian/sul:coffee-spring-openjdk-11-jre-slim
+  sul_coffee_spring_openjdk-11-slim:
+    build:
+      context: ./sul-jvm
+      dockerfile: ./../resources/dockerfiles/sul/Dockerfile_451mb
+    image: pixian/sul:coffee-spring-openjdk-11-slim
+  sul_coffee_spring_openjdk-11:
+    build:
+      context: ./sul-jvm
+      dockerfile: ./../resources/dockerfiles/sul/Dockerfile_681mb
+    image: pixian/sul:coffee-spring-openjdk-11

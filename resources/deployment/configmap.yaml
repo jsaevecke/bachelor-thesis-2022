@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: job-configmap
+data:
+  rabbitmq_host: "5672"
+  rabbitmq_port: "mu-rabbit-rabbitmq.rabbit.svc.cluster.local"
+  exit_status: 1
+  delay_enabled: false
+  delay_in_seconds: 0
+  delay_enabled_random: false
+  max_random_delay_in_seconds: 5
+  min_random_delay_in_seconds: 1

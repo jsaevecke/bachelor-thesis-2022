@@ -30,8 +30,8 @@ helm install prometheus prometheus-community/kube-prometheus-stack --namespace p
 
 echo "Updating Helm-Release Configurations..."
 
-helm upgrade --reuse-values -f ./kubernetes/rabbitmq-values.yaml mu-rabbit bitnami/rabbitmq --namespace rabbit
-helm upgrade --reuse-values -f ./kubernetes/prometheus-values.yaml prometheus prometheus-community/kube-prometheus-stack --namespace prometheus
+helm upgrade --reuse-values -f ./rabbitmq-values.yaml mu-rabbit bitnami/rabbitmq --namespace rabbit
+helm upgrade --reuse-values -f ./prometheus-values.yaml prometheus prometheus-community/kube-prometheus-stack --namespace prometheus
 
 echo "Exposing Dashboards..."
 
