@@ -1,28 +1,11 @@
 package com.julien.saevecke.shared.messages;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
-/*
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Component
-public class MembershipQuery {
-    // uuid identifies the MembershipQuery (set by publisher)
-    String uuid;
-    // contains pod name that answered the query (set by consumer)
-    String podName;
-    // artificial processing delay in seconds (set by publisher)
-    int delayInSeconds;
-    // query represents the query itself (set by publisher, modified by consumer)
-    DefaultQueryProxy query;
-}*/
 
 public class MembershipQuery implements Serializable {
     private static final long serialVersionUID = 9109635319693213385L;

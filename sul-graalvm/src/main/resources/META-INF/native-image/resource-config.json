@@ -2,10 +2,13 @@
   "resources":{
   "includes":[
     {
+      "pattern":"\\QMETA-INF/services/net.automatalib.AutomataLibSettingsSource\\E"
+    }, 
+    {
       "pattern":"\\Qapplication.properties\\E"
     }, 
     {
-      "pattern":"\\Qcom/julien/saevecke/sul/sulnative/\\E"
+      "pattern":"\\Qcom/julien/saevecke/sulnative/\\E"
     }, 
     {
       "pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"
