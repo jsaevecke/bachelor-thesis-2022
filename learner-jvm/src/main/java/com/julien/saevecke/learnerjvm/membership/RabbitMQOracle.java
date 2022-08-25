@@ -45,7 +45,7 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
 
         var latch = new CountDownLatch(1);
         Thread newThread = new Thread(()->{
-            long responseStartTime = System.nanoTime();
+            long responseStartTime = System.nanoTime(); // statistics
             var completed = false;
             var queriesAnswered = 0;
 
@@ -58,15 +58,9 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
                 }
 
                 var query = (MembershipQuery)message;
+                System.out.println(query);
 
                 if(sentQueries.containsKey(query.getUuid())) {
-                    var defaultQuery = sentQueries.get(query.getUuid());
-                    defaultQuery.answer(Word.fromList(query.getQuery().getOutput()));
-                    queriesAnswered++;
-
-                    if(queriesAnswered != sentQueries.size())
-                        completed = false;
-
                     long responseCompletedTime = System.nanoTime();
                     long responseTimeElapsed = responseCompletedTime - responseStartTime;
 
@@ -77,12 +71,40 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
                         statistics.minNextResponseTime = responseTimeElapsed;
                     }
                     statistics.averageNextResponseTime += responseTimeElapsed;
+
+                    System.out.println("Response Time: " + responseTimeElapsed);
+
+                    responseStartTime = System.nanoTime();
+
+                    var defaultQuery = sentQueries.get(query.getUuid());
+                    defaultQuery.answer(Word.fromList(query.getQuery().getOutput()));
+                    queriesAnswered++;
+
+                    if(queriesAnswered != sentQueries.size())
+                        completed = false;
+
                     System.out.println("Received from " + query.getPodName() + ": " + query.getQuery().getPrefix() + " | " + query.getQuery().getSuffix() + " --> " + query.getQuery().getOutput());
                 } else {
                     System.out.println("Unknown message received - drop!");
                     completed = false;
                 }
-                responseStartTime = System.nanoTime();
+
+                var startUpTime = query.getPodStartUpTime();
+                var processingTime = query.getPodProcessingTime();
+                statistics.averageStartUpTime += startUpTime;
+                statistics.averageProcessingTime += processingTime;
+                if(statistics.maxStartUpTime < startUpTime){
+                    statistics.maxStartUpTime = startUpTime;
+                }
+                if(statistics.minStartUpTime > startUpTime) {
+                    statistics.minStartUpTime = startUpTime;
+                }
+                if(statistics.maxProcessingTime < processingTime){
+                    statistics.maxProcessingTime = processingTime;
+                }
+                if(statistics.minProcessingTime > processingTime) {
+                    statistics.minProcessingTime = processingTime;
+                }
             }
 
             sentQueries.clear();
@@ -102,9 +124,6 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
         long batchTimeElapsed = batchCompletedTime - batchStartTime;
 
         var numberOfQueries = queries.size();
-
-        //start up time
-        //processing time
 
         // accumelate statistics for evaluation
         statistics.totalSentQueries += numberOfQueries;
