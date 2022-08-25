@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class SulGraalVMApplication {
+	private static long podStartTime;
+
 	@Autowired
 	private SUL<String, String> sul;
 	@Autowired
@@ -48,11 +50,15 @@ public class SulGraalVMApplication {
 
 	public static void
 	main(String[] args) {
+		podStartTime = System.nanoTime();
 		SpringApplication.run(SulGraalVMApplication.class, args);
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void consume() {
+		long podCompletedTime = System.nanoTime();
+		long podTimeElapsed = podCompletedTime - podStartTime;
+
 		sul.pre();
 		var completed = false;
 		while(!completed) {
@@ -60,10 +66,11 @@ public class SulGraalVMApplication {
 			if (message == null) {
 				continue;
 			}
-
 			var membershipQuery = (MembershipQuery) message;
 
 			System.out.println(hostname + " received message with uuid: " + membershipQuery.getUuid());
+
+			long processingStartTime = System.nanoTime();
 
 			if(delayEnabled) {
 				try {
@@ -93,8 +100,10 @@ public class SulGraalVMApplication {
 
 				query.setOutput(wb.toWord().asList());
 
-				var response = new MembershipQuery(membershipQuery.getUuid(), hostname, membershipQuery.getDelayInSeconds(), membershipQuery.getQuery());
+				long processingCompletedTime = System.nanoTime();
+				long processingTimeElapsed = processingCompletedTime - processingStartTime;
 
+				var response = new MembershipQuery(membershipQuery.getUuid(), hostname, membershipQuery.getQuery(), podTimeElapsed, processingTimeElapsed);
 				template.convertAndSend(
 						RabbitMQ.SUL_DIRECT_EXCHANGE,
 						RabbitMQ.SUL_OUTPUT_ROUTING_KEY,

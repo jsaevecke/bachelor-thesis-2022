@@ -5,16 +5,18 @@ metadata:
   namespace: sul
 spec:
   parallelism: 1
+  completions: null
   template:
     spec:
+      restartPolicy: Never
       containers:
         - name: coffee-sul
           image: pixian/sul:coffee-spring-adoptopenjdk-11-jre-alpine
           imagePullPolicy: Always
           resources:
             limits:
-              cpu: 1000m
-              memory: 1Gi
+              cpu: 1500m
+              memory: 3Gi
             requests:
               cpu: 50m
               memory: 50Mi
@@ -24,32 +26,32 @@ spec:
             - name: EXIT_STATUS
               valueFrom:
                 configMapKeyRef:
-                  name: job-configmap
+                  name: configmap
                   key: exit_status
             - name: ENABLE_DELAY
               valueFrom:
                 configMapKeyRef:
-                  name: job-configmap
+                  name: configmap
                   key: delay_enabled
             - name: ENABLE_RANDOM_DELAY
               valueFrom:
                 configMapKeyRef:
-                  name: job-configmap
+                  name: configmap
                   key: delay_enabled_random
             - name: DELAY_IN_SECONDS
               valueFrom:
                 configMapKeyRef:
-                  name: job-configmap
+                  name: configmap
                   key: delay_in_seconds
             - name: MAX_RANDOM_DELAY_IN_SECONDS
               valueFrom:
                 configMapKeyRef:
-                  name: job-configmap
+                  name: configmap
                   key: max_random_delay_in_seconds
             - name: MIN_RANDOM_DELAY_IN_SECONDS
               valueFrom:
                 configMapKeyRef:
-                  name: job-configmap
+                  name: configmap
                   key: min_random_delay_in_seconds
             - name: MY_POD_NAME
               valueFrom:
@@ -58,12 +60,12 @@ spec:
             - name: SPRING_RABBITMQ_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: job-configmap
+                  name: configmap
                   key: rabbitmq_host
             - name: SPRING_RABBITMQ_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: job-configmap
+                  name: configmap
                   key: rabbitmq_port
             - name: SPRING_RABBITMQ_USERNAME
               valueFrom:
@@ -75,5 +77,3 @@ spec:
                 secretKeyRef:
                   name: rabbitmq-secret
                   key: RABBIT_PASSWORD
-      restartPolicy: Never
-  backoffLimit: 0

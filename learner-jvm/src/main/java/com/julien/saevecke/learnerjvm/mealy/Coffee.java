@@ -1,6 +1,7 @@
 package com.julien.saevecke.learnerjvm.mealy;
 
 import com.julien.saevecke.learnerjvm.membership.RabbitMQOracle;
+import com.julien.saevecke.learnerjvm.statistics.Statistics;
 import de.learnlib.algorithms.dhc.mealy.MealyDHC;
 import de.learnlib.api.query.DefaultQuery;
 import de.learnlib.oracle.equivalence.WpMethodEQOracle;
@@ -21,9 +22,12 @@ public class Coffee {
     public static final String CLEAN = "CLEAN";
     public static final String WATER = "WATER";
     public static final String BUTTON = "BUTTON";
+    public static final int CONVERT_TO_MS = 1000000;
 
     @Autowired
     RabbitMQOracle membershipOracle;
+    @Autowired
+    Statistics statistics;
 
     @EventListener(ApplicationReadyEvent.class)
     public void learn() {
@@ -49,6 +53,9 @@ public class Coffee {
         } while (counterexample != null);
         System.out.println("Learning complete");
 
+        long finish = System.nanoTime();
+        long timeElapsed = finish - start;
+
         final var model = learner.getHypothesisModel();
 
         try {
@@ -59,9 +66,28 @@ public class Coffee {
             //
         }
 
-        long finish = System.nanoTime();
-        long timeElapsed = finish - start;
+        statistics.totalLearnTime = timeElapsed/CONVERT_TO_MS;
 
-        System.out.println("Learn time: " + timeElapsed/1000000 + " ms");
+        statistics.minNextResponseTime /= CONVERT_TO_MS;
+        statistics.maxNextResponseTime /= CONVERT_TO_MS;
+        statistics.averageNextResponseTime /= statistics.totalSentQueries;
+        statistics.averageNextResponseTime /= CONVERT_TO_MS;
+
+        statistics.minProcessingTime /= CONVERT_TO_MS;
+        statistics.maxProcessingTime /= CONVERT_TO_MS;
+        statistics.averageProcessingTime /= statistics.totalSentQueries;
+        statistics.averageProcessingTime /= CONVERT_TO_MS;
+
+        statistics.minBatchProcessingTime /= CONVERT_TO_MS;
+        statistics.maxBatchProcessingTime /= CONVERT_TO_MS;
+        statistics.averageBatchProcessingTime /= statistics.totalBatches;
+        statistics.averageBatchProcessingTime /= CONVERT_TO_MS;
+
+        statistics.minStartUpTime /= CONVERT_TO_MS;
+        statistics.maxStartUpTime /= CONVERT_TO_MS;
+        statistics.averageStartUpTime /= statistics.totalBatches;
+        statistics.averageStartUpTime /= CONVERT_TO_MS;
+
+        System.out.println(statistics);
     }
 }

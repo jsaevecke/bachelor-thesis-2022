@@ -14,12 +14,20 @@ import java.util.UUID;
 @ToString
 public class MembershipQuery implements Serializable {
     private static final long serialVersionUID = 1234635319693213385L;
+
+    public MembershipQuery(UUID uuid, DefaultQueryProxy query) {
+        this.uuid = uuid;
+        this.query = query;
+    }
+
     // uuid identifies the MembershipQuery (set by publisher)
-    UUID uuid;
+    private UUID uuid;
     // contains pod name that answered the query (set by consumer)
-    String podName;
-    // artificial processing delay in seconds (set by publisher)
-    int delayInSeconds;
+    private String podName;
     // query represents the query itself (set by publisher, modified by consumer)
-    DefaultQueryProxy query;
+    private DefaultQueryProxy query;
+
+    // statistics
+    private long podStartUpTime;
+    private long podProcessingTime;
 }
