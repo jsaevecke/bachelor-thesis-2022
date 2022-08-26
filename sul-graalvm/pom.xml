@@ -12,7 +12,30 @@
 	<artifactId>sul-graalvm</artifactId>
 	<version>0.0.1</version>
 	<name>sul-graalvm</name>
-	<description>Demo project for Spring Boot</description>
+	<description>
+		This module is used as a ‘System Under Learning‘ (SUL) meaning it is a system that can be learned and represented
+		as a state machine. This particular module represents a simple coffee-machine. Communication is done via ‘RabbitMQ‘.
+		For performance reasons is this application build as a native image via ‘GraalVM‘ and the framework ‘Spring Native‘.
+
+		Accepts the following input (as a sequence):
+		* POD
+		* CLEAN
+		* WATER
+		* BUTTON
+
+		Produces the following output (as a sequence):
+		* ok
+		* error
+		* coffee!
+
+		A usable learner to learn this coffee-machine SUL can be found under: ‘com.julien.saevecke.learnerjvm‘.
+
+		Build command: ‘./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=pixian/sul:coffee-spring-native-graalvm‘.
+		For more information about ‘Spring Native‘, 'GraalVM' or native images in general:
+		*https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/
+		*https://www.graalvm.org
+		*https://www.graalvm.org/22.1/reference-manual/native-image/
+	</description>
 	<properties>
 		<java.version>11</java.version>
 		<skipTests>true</skipTests>
@@ -97,9 +120,9 @@
 				<groupId>org.springframework.experimental</groupId>
 				<artifactId>spring-aot-maven-plugin</artifactId>
 				<version>${spring-native.version}</version>
-				<!--<configuration>
-					<mode>native-agent</mode>
-				</configuration>-->
+				<configuration>
+					<mode>native</mode>
+				</configuration>
 				<executions>
 					<!--<execution>
 						<id>test-generate</id>
