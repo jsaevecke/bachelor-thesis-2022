@@ -2,10 +2,12 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: coffee-sul
-  namespace: sul
+  namespace: saevecke
 spec:
-  parallelism: 1
-  completions: null
+  parallelism: 8
+  completions: 1000000000
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 6
   template:
     spec:
       restartPolicy: Never

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-remediator
+  namespace: saevecke
+  labels:
+    project: kube-remediator
+    role: app-server
+    team: compute
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: kube-remediator
+      role: app-server
+  template:
+    metadata:
+      labels:
+        project: kube-remediator
+        role: app-server
+        team: compute
+    spec:
+      serviceAccountName: monitor-pods-acc
+      containers:
+        - name: remediator
+          image: pixian/kube_remediator
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+          resources:
+            limits:
+              cpu: 100m
+              memory: 500Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: main-port
+          ports:
+            - name: main-port
+              containerPort: 8080

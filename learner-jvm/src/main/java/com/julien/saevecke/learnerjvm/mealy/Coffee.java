@@ -29,7 +29,6 @@ public class Coffee {
     @Autowired
     Statistics statistics;
 
-    @EventListener(ApplicationReadyEvent.class)
     public void learn() {
         var alphabet = Alphabets.fromArray(POD, CLEAN, WATER, BUTTON);
         var learner = new MealyDHC<>(alphabet, membershipOracle);

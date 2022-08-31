@@ -2,19 +2,21 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: coffee-sul
-  namespace: sul
+  namespace: saevecke
 spec:
-  parallelism: 1
+  parallelism: 16
+  completions: 1000000000
   template:
     spec:
+      restartPolicy: Never
       containers:
         - name: coffee-sul
           image: pixian/sul:coffee-spring-native-graalvm
           imagePullPolicy: Always
           resources:
             limits:
-              cpu: 1000m
-              memory: 1Gi
+              cpu: 1500m
+              memory: 3Gi
             requests:
               cpu: 50m
               memory: 50Mi
@@ -75,5 +77,3 @@ spec:
                 secretKeyRef:
                   name: rabbitmq-secret
                   key: RABBIT_PASSWORD
-      restartPolicy: Never
-  backoffLimit: 0

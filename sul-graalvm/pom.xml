@@ -111,9 +111,9 @@
 							<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
 						</env>
 					</image>
-					<!--<systemPropertyVariables>
-						<springAot>true</springAot>
-					</systemPropertyVariables>-->
+					<systemPropertyVariables>
+						<springAot>false</springAot>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -121,7 +121,7 @@
 				<artifactId>spring-aot-maven-plugin</artifactId>
 				<version>${spring-native.version}</version>
 				<configuration>
-					<mode>native</mode>
+					<mode>native</mode> <!--native-agent-->
 				</configuration>
 				<executions>
 					<!--<execution>

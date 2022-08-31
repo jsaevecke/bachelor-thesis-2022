@@ -2,13 +2,12 @@ package com.julien.saevecke.learnerjvm.configurations;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 @Configuration
 public class RabbitMQ {
@@ -38,6 +37,11 @@ public class RabbitMQ {
     @Bean
     public Binding bindingMOQueue(DirectExchange exchange) {
         return BindingBuilder.bind(sulOutputQueue()).to(exchange).with(SUL_OUTPUT_ROUTING_KEY);
+    }
+
+    @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
     }
 
     @Bean

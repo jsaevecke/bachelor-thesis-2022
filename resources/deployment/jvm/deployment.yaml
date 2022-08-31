@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: coffee-sul
-  namespace: sul
+  namespace: saevecke
   labels:
     app: coffee-sul
 spec:
@@ -14,6 +14,8 @@ spec:
     metadata:
       labels:
         app: coffee-sul
+      annotations:
+        kube-remediator/CrashLoopBackOffRemediator: "true"
     spec:
       containers:
       - name: coffee-sul

@@ -4,7 +4,7 @@ metadata:
   name: keda-rabbitmq-secret
   namespace: sul
 data:
-  host: "aHR0cDovL2d1ZXN0Omd1ZXN0QHJhYmJpdG1xLTAucmFiYml0bXEucmFiYml0cy5zdmMuY2x1c3Rlci5sb2NhbDoxNTY3Mi92aG9zdA=="
+  host: "YW1xcDovL2d1ZXN0Omd1ZXN0QG11LXJhYmJpdC1yYWJiaXRtcS5yYWJiaXQuc3ZjLmNsdXN0ZXIubG9jYWw6NTY3Mi92aG9zdA=="
 ---
 apiVersion: keda.sh/v1alpha1
 kind: TriggerAuthentication
@@ -32,13 +32,13 @@ spec:
   pollingInterval: 1  # Optional. Default: 30 seconds
   cooldownPeriod:  15 # Optional. Default: 300 seconds
   minReplicaCount: 1
-  maxReplicaCount: 10
   triggers:
   - type: rabbitmq
     metadata:
-      protocol: http
-      queueName: "sul_input_q"
-      queueLength: "1"
+      protocol: amqp
+      mode: QueueLength # QueueLength or MessageRate
+      queueName: sul_input_q
+      value: "1"
       vhostName: /
     authenticationRef:
       name: keda-trigger-auth-rabbitmq-conn
