@@ -49,7 +49,7 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
             var completed = false;
             var queriesAnswered = 0;
 
-            while(!completed) {
+            while(!completed && sentQueries.size() > 0) {
                 completed = true;
                 var message = template.receiveAndConvert(RabbitMQ.SUL_OUTPUT_QUEUE);
                 if (message == null) {
