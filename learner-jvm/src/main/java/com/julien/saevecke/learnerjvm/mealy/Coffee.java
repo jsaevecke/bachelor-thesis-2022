@@ -57,7 +57,6 @@ public class Coffee {
             }
 
             counterexample = eq.findCounterExample(learner.getHypothesisModel(), alphabet);
-
         } while (counterexample != null);
         System.out.println("Learning complete");
 

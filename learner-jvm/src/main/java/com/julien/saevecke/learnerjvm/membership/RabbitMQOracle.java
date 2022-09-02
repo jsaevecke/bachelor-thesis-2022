@@ -30,7 +30,7 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
     public void processQueries(Collection<? extends Query<String, Word<String>>> queries) {
         for (Query<String, Word<String>> rawQuery : queries) {
             var uuid = UUID.randomUUID();
-            var defaultQuery = (DefaultQuery<String, Word<String>>)rawQuery;
+            var defaultQuery = new DefaultQuery<String, Word<String>>(rawQuery.getInput());//(DefaultQuery<String, Word<String>>)rawQuery;
             var query = new MembershipQuery(uuid, DefaultQueryProxy.createFrom(defaultQuery));
             sentQueries.put(uuid, defaultQuery);
 
