@@ -1,12 +1,7 @@
-rabbitmq
-
-user: user
-password: zomQXQiBmXBaTsYK
-
 
 microk8s kubectl port-forward --namespace saevecke svc/mu-rabbit-rabbitmq 5672:5672
 
 java -jar learner.jar -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=run_
 java -jar learner.jar -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=run_ --spring.rabbitmq.port=30640
 
-amqp://129.217.27.103:30640/
+amqp://localhost:30640/

@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coffee-sul
+  namespace: saevecke
+  labels:
+    app: coffee-sul
+spec:
+  selector:
+    matchLabels:
+      app: coffee-sul
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: coffee-sul
+      annotations:
+        kube-remediator/CrashLoopBackOffRemediator: "true"
+    spec:
+      containers:
+      - name: coffee-sul
+        image: pixian/sul:coffee-spring-native-graalvm
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+          - name: EXIT_STATUS
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: exit_status
+          - name: ENABLE_DELAY
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: delay_enabled
+          - name: ENABLE_RANDOM_DELAY
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: delay_enabled_random
+          - name: DELAY_IN_SECONDS
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: delay_in_seconds
+          - name: MAX_RANDOM_DELAY_IN_SECONDS
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: max_random_delay_in_seconds
+          - name: MIN_RANDOM_DELAY_IN_SECONDS
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: min_random_delay_in_seconds
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: SPRING_RABBITMQ_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: rabbitmq_host
+          - name: SPRING_RABBITMQ_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: rabbitmq_port
+          - name: SPRING_RABBITMQ_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq-secret
+                key: RABBIT_USERNAME
+          - name: SPRING_RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq-secret
+                key: RABBIT_PASSWORD
