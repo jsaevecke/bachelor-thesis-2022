@@ -9,12 +9,17 @@ import net.automatalib.serialization.dot.GraphDOT;
 import net.automatalib.words.Word;
 import net.automatalib.words.impl.Alphabets;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Component
 public class Coffee {
@@ -25,9 +30,15 @@ public class Coffee {
     public static final int CONVERT_TO_MS = 1000000;
 
     @Autowired
-    RabbitMQOracle membershipOracle;
+    private RabbitMQOracle membershipOracle;
     @Autowired
-    Statistics statistics;
+    private Statistics statistics;
+
+    @Value("${SAVE_RESULTS_TO_FILE:true}")
+    private boolean saveResultsToFile = true;
+
+    @Value("${FILENAME_PREFIX:run_}")
+    private String fileNamePrefix = "run_";
 
     public void learn() {
         var alphabet = Alphabets.fromArray(POD, CLEAN, WATER, BUTTON);
@@ -60,33 +71,37 @@ public class Coffee {
         try {
             final var sw = new StringWriter();
             GraphDOT.write(model, alphabet, sw);
-            System.out.println(sw);
+            if(saveResultsToFile) {
+                String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+                try (PrintWriter out = new PrintWriter( fileNamePrefix + fileName + "_digraph" + ".txt")) {
+                    out.println(sw);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                System.out.println(sw);
+            }
         } catch (IOException e) {
             //
         }
 
-        statistics.totalLearnTime = timeElapsed/CONVERT_TO_MS;
+        statistics.totalLearnTime = timeElapsed;
 
-        statistics.minNextResponseTime /= CONVERT_TO_MS;
-        statistics.maxNextResponseTime /= CONVERT_TO_MS;
         statistics.averageNextResponseTime /= statistics.totalSentQueries;
-        statistics.averageNextResponseTime /= CONVERT_TO_MS;
-
-        statistics.minProcessingTime /= CONVERT_TO_MS;
-        statistics.maxProcessingTime /= CONVERT_TO_MS;
         statistics.averageProcessingTime /= statistics.totalSentQueries;
-        statistics.averageProcessingTime /= CONVERT_TO_MS;
-
-        statistics.minBatchProcessingTime /= CONVERT_TO_MS;
-        statistics.maxBatchProcessingTime /= CONVERT_TO_MS;
+        statistics.averageStartUpTime /= statistics.totalSentQueries;
         statistics.averageBatchProcessingTime /= statistics.totalBatches;
-        statistics.averageBatchProcessingTime /= CONVERT_TO_MS;
+        statistics.averageBatchSize /= statistics.totalBatches;
 
-        statistics.minStartUpTime /= CONVERT_TO_MS;
-        statistics.maxStartUpTime /= CONVERT_TO_MS;
-        statistics.averageStartUpTime /= statistics.totalBatches;
-        statistics.averageStartUpTime /= CONVERT_TO_MS;
-
-        System.out.println(statistics);
+        if(saveResultsToFile) {
+            String fileName = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+            try (PrintWriter out = new PrintWriter(fileNamePrefix + fileName + ".txt")) {
+                out.println(statistics);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.out.println(statistics);
+        }
     }
 }

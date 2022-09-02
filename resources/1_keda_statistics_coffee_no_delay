@@ -1,6 +1,6 @@
 Statistics{
-    averageProcessingTime=0, // FIX
-    averageStartUpTime=87, // 0,087 Sekunden --> RICHTIG GUT!
+    averageProcessingTime=0,
+    averageStartUpTime=87,
     averageNextResponseTime=3319, // 3,319 Sekunden -> Großer unterschied zu 'maxNextResponseTime'
     averageBatchProcessingTime=3475, // 3,475 Sekunden
     averageBatchSize=5281, // Sollte zwischen 1-6 sein, da 'maxBatchSize = 6' -> FIX

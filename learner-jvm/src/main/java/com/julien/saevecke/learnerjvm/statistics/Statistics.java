@@ -4,23 +4,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Statistics {
-    public long averageProcessingTime = 0; //ms
-    public long averageStartUpTime = 0; //ms
-    public long averageNextResponseTime = 0; //ms
-    public long averageBatchProcessingTime = 0; //ms
+    public long averageProcessingTime = 0;
+    public long averageStartUpTime = 0;
+    public long averageNextResponseTime = 0;
+    public long averageBatchProcessingTime = 0;
     public int averageBatchSize = 0;
 
-    public long maxProcessingTime = 0; //ms
-    public long minProcessingTime = 0; //ms
-    public long maxStartUpTime = 0; //ms
-    public long minStartUpTime = 0; //ms
+    public long maxProcessingTime = 0;
+    public long minProcessingTime = Long.MAX_VALUE;
+    public long maxStartUpTime = 0;
+    public long minStartUpTime = Long.MAX_VALUE;
 
-    public long maxNextResponseTime = 0; //ms
-    public long minNextResponseTime = 0; //ms
-    public long minBatchProcessingTime = 0; //ms
-    public long maxBatchProcessingTime = 0; //ms
+    public long maxNextResponseTime = 0;
+    public long minNextResponseTime = Long.MAX_VALUE;
+    public long minBatchProcessingTime = Long.MAX_VALUE;
+    public long maxBatchProcessingTime = 0;
     public int maxBatchSize = 0;
-    public int minBatchSize = 0;
+    public int minBatchSize = Integer.MAX_VALUE;
 
     public int totalSentQueries = 0;
     public int totalBatches = 0;
