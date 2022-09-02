@@ -5,7 +5,7 @@ metadata:
   namespace: saevecke
 data:
   rabbitmq_port: "5672"
-  rabbitmq_host: "mu-rabbit-rabbitmq.rabbit.svc.cluster.local"
+  rabbitmq_host: "mu-rabbit-rabbitmq.saevecke.svc.cluster.local"
   exit_status: "0"
   delay_enabled: "false"
   delay_in_seconds: "0"

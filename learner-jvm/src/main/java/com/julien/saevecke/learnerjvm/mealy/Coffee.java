@@ -4,14 +4,12 @@ import com.julien.saevecke.learnerjvm.membership.RabbitMQOracle;
 import com.julien.saevecke.learnerjvm.statistics.Statistics;
 import de.learnlib.algorithms.dhc.mealy.MealyDHC;
 import de.learnlib.api.query.DefaultQuery;
-import de.learnlib.oracle.equivalence.WpMethodEQOracle;
+import de.learnlib.oracle.equivalence.SimulatorEQOracle;
 import net.automatalib.serialization.dot.GraphDOT;
 import net.automatalib.words.Word;
 import net.automatalib.words.impl.Alphabets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
@@ -27,7 +25,6 @@ public class Coffee {
     public static final String CLEAN = "CLEAN";
     public static final String WATER = "WATER";
     public static final String BUTTON = "BUTTON";
-    public static final int CONVERT_TO_MS = 1000000;
 
     @Autowired
     private RabbitMQOracle membershipOracle;
@@ -43,8 +40,8 @@ public class Coffee {
     public void learn() {
         var alphabet = Alphabets.fromArray(POD, CLEAN, WATER, BUTTON);
         var learner = new MealyDHC<>(alphabet, membershipOracle);
-        //TTTLearnerMealy<>
-        var eq = new WpMethodEQOracle<>(membershipOracle, 3);
+
+        var eq = new SimulatorEQOracle<>(new CoffeeConcrete().coffeeMachine());
 
         DefaultQuery<String, Word<String>> counterexample = null;
         long start = System.nanoTime();

@@ -1,3 +1,5 @@
+service:
+  type: NodePort
 ## Prometheus Metrics
 metrics:
   enabled: true

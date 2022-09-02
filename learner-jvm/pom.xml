@@ -68,6 +68,12 @@
             <artifactId>automata-serialization-dot</artifactId>
             <version>0.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>de.learnlib</groupId>
+            <artifactId>learnlib-drivers-simulator</artifactId>
+            <version>0.16.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
