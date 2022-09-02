@@ -4,6 +4,7 @@ import com.julien.saevecke.learnerjvm.membership.RabbitMQOracle;
 import com.julien.saevecke.learnerjvm.statistics.Statistics;
 import de.learnlib.algorithms.dhc.mealy.MealyDHC;
 import de.learnlib.api.query.DefaultQuery;
+import de.learnlib.filter.cache.mealy.MealyCacheOracle;
 import de.learnlib.oracle.equivalence.SimulatorEQOracle;
 import net.automatalib.serialization.dot.GraphDOT;
 import net.automatalib.words.Word;
@@ -39,8 +40,8 @@ public class Coffee {
 
     public void learn() {
         var alphabet = Alphabets.fromArray(POD, CLEAN, WATER, BUTTON);
-        var learner = new MealyDHC<>(alphabet, membershipOracle);
-
+        var cacheOracle = MealyCacheOracle.createDAGCacheOracle(alphabet, membershipOracle);
+        var learner = new MealyDHC<>(alphabet, cacheOracle);
         var eq = new SimulatorEQOracle<>(new CoffeeConcrete().coffeeMachine());
 
         DefaultQuery<String, Word<String>> counterexample = null;
