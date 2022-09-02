@@ -24,7 +24,7 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
     @Autowired
     AmqpTemplate template;
 
-    HashMap<UUID, DefaultQuery<String, Word<String>>> sentQueries = new HashMap<>();
+    HashMap<UUID, Query<String, Word<String>>> sentQueries = new HashMap<>();
 
     @Override
     public void processQueries(Collection<? extends Query<String, Word<String>>> queries) {
@@ -32,7 +32,7 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
             var uuid = UUID.randomUUID();
             var defaultQuery = new DefaultQuery<String, Word<String>>(rawQuery.getInput());//(DefaultQuery<String, Word<String>>)rawQuery;
             var query = new MembershipQuery(uuid, DefaultQueryProxy.createFrom(defaultQuery));
-            sentQueries.put(uuid, defaultQuery);
+            sentQueries.put(uuid, rawQuery);
 
             System.out.println("Sent query: " + query.getQuery().getPrefix() + " | " + query.getQuery().getSuffix());
 
@@ -76,8 +76,8 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
 
                     responseStartTime = System.nanoTime();
 
-                    var defaultQuery = sentQueries.get(query.getUuid());
-                    defaultQuery.answer(Word.fromList(query.getQuery().getOutput()));
+                    var sentQuery = sentQueries.get(query.getUuid());
+                    sentQuery.answer(Word.fromList(query.getQuery().getOutput()));
                     queriesAnswered++;
 
                     if(queriesAnswered != sentQueries.size())
