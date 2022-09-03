@@ -2,6 +2,6 @@
 microk8s kubectl port-forward --namespace saevecke svc/mu-rabbit-rabbitmq 5672:5672
 
 java -jar learner.jar -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=run_
-java -jar learner.jar -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=run_ --spring.rabbitmq.port=30640
+java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=fixed8_run_ -jar learner.jar --spring.rabbitmq.port=30640
 
 amqp://localhost:30640/
