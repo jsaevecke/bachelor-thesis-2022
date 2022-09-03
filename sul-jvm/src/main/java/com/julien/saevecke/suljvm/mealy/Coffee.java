@@ -29,7 +29,6 @@ public class Coffee {
         var alphabet = Alphabets.fromArray(POD, CLEAN, WATER, BUTTON);
         var automaton = new CompactMealy<String, String>(alphabet);
 
-        // TODO: put states and output in separate classes
         // @formatter:off
         return AutomatonBuilders.forMealy(automaton)
                 .withInitial("a")
