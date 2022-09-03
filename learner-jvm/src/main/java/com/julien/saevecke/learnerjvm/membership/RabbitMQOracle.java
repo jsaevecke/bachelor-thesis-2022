@@ -28,6 +28,7 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
 
     @Override
     public void processQueries(Collection<? extends Query<String, Word<String>>> queries) {
+        var batchSize = queries.size();
         for (Query<String, Word<String>> rawQuery : queries) {
             var uuid = UUID.randomUUID();
             var defaultQuery = new DefaultQuery<String, Word<String>>(rawQuery.getInput());//(DefaultQuery<String, Word<String>>)rawQuery;
@@ -123,18 +124,23 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
         long batchCompletedTime = System.nanoTime();
         long batchTimeElapsed = batchCompletedTime - batchStartTime;
 
-        var numberOfQueries = queries.size();
-
         // accumelate statistics for evaluation
-        statistics.totalSentQueries += numberOfQueries;
-        statistics.averageBatchSize += numberOfQueries; // will be divides by total batches
-        if(statistics.maxBatchSize < numberOfQueries){
-            statistics.maxBatchSize = numberOfQueries;
+        statistics.totalSentQueries += batchSize;
+        statistics.averageBatchSize += batchSize; // will be divides by total batches
+        if(statistics.maxBatchSize < batchSize){
+            statistics.maxBatchSize = batchSize;
         }
-        if(statistics.minBatchSize > numberOfQueries) {
-            statistics.minBatchSize = numberOfQueries;
+        if(statistics.minBatchSize > batchSize) {
+            statistics.minBatchSize = batchSize;
         }
+        if(statistics.maxBatchProcessingTime < batchTimeElapsed){
+            statistics.maxBatchProcessingTime = batchTimeElapsed;
+        }
+        if(statistics.minBatchProcessingTime > batchTimeElapsed) {
+            statistics.minBatchProcessingTime = batchTimeElapsed;
+        }
+
         statistics.averageBatchProcessingTime += batchTimeElapsed; // will be divded by total batches
-        statistics.totalBatches += 1;
+        statistics.totalBatches++;
     }
 }
