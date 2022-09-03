@@ -4,9 +4,10 @@ metadata:
   name: keda-rabbitmq-secret
   namespace: saevecke
 data:
-  host: "YW1xcDovL2d1ZXN0Omd1ZXN0QG11LXJhYmJpdC1yYWJiaXRtcS5zYWV2ZWNrZS5zdmMuY2x1c3Rlci5sb2NhbDo1NjcyL3Zob3N0"
-  # cluster: YW1xcDovL2d1ZXN0Omd1ZXN0QG11LXJhYmJpdC1yYWJiaXRtcS5zYWV2ZWNrZS5zdmMuY2x1c3Rlci5sb2NhbDo1NjcyL3Zob3N0
-  # local: YW1xcDovL2d1ZXN0Omd1ZXN0QG11LXJhYmJpdC1yYWJiaXRtcS5yYWJiaXQuc3ZjLmNsdXN0ZXIubG9jYWw6NTY3Mi92aG9zdA==
+  host: "aHR0cDovL2d1ZXN0Omd1ZXN0QG11LXJhYmJpdC1yYWJiaXRtcS5zYWV2ZWNrZS5zdmMuY2x1c3Rlci5sb2NhbDoxNTY3Mi92aG9zdA=="
+  # message rate http-cluster: aHR0cDovL2d1ZXN0Omd1ZXN0QG11LXJhYmJpdC1yYWJiaXRtcS5zYWV2ZWNrZS5zdmMuY2x1c3Rlci5sb2NhbDoxNTY3Mi92aG9zdA==
+  # amqp-cluster: YW1xcDovL2d1ZXN0Omd1ZXN0QG11LXJhYmJpdC1yYWJiaXRtcS5zYWV2ZWNrZS5zdmMuY2x1c3Rlci5sb2NhbDo1NjcyL3Zob3N0
+  # amqp-local: YW1xcDovL2d1ZXN0Omd1ZXN0QG11LXJhYmJpdC1yYWJiaXRtcS5yYWJiaXQuc3ZjLmNsdXN0ZXIubG9jYWw6NTY3Mi92aG9zdA==
 ---
 apiVersion: keda.sh/v1alpha1
 kind: TriggerAuthentication
@@ -37,7 +38,7 @@ spec:
   triggers:
   - type: rabbitmq
     metadata:
-      protocol: amqp
+      protocol: http
       mode: MessageRate # QueueLength or MessageRate
       queueName: sul_output_q
       value: "0.5"
