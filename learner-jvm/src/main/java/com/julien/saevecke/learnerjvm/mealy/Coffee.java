@@ -11,6 +11,8 @@ import net.automatalib.words.Word;
 import net.automatalib.words.impl.Alphabets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
@@ -27,6 +29,8 @@ public class Coffee {
     public static final String WATER = "WATER";
     public static final String BUTTON = "BUTTON";
 
+    @Autowired
+    private ApplicationContext appContext;
     @Autowired
     private RabbitMQOracle membershipOracle;
     @Autowired
@@ -100,5 +104,8 @@ public class Coffee {
         } else {
             System.out.println(statistics);
         }
+
+        SpringApplication.exit(appContext, () -> 0);
+        System.exit(0);
     }
 }
