@@ -1,5 +1,4 @@
 #!/bin/bash
-
 iterations=$1
 # shellcheck disable=SC2034
 for iteration in $(seq "${iterations}"); do
@@ -10,5 +9,6 @@ for iteration in $(seq "${iterations}"); do
         microk8s kubectl apply -f "$index"
         sleep 10
     done
-    java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX="${iteration}_${2}" -jar ./learner.jar --spring.rabbitmq.port=30640
+    source monitor_replias.sh "${iteration}_${2}_replicas_log.txt"
+    java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX="${iteration}_${2}.txt" -jar ./learner.jar --spring.rabbitmq.port=30640
 done
