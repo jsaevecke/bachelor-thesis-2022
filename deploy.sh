@@ -1,10 +1,10 @@
 #!/bin/bash
-iterations=$1
+iterations=${1}
 # shellcheck disable=SC2034
 for iteration in $(seq "${iterations}"); do
     microk8s kubectl delete deployment coffee-sul -n saevecke
     microk8s kubectl delete scaledobject rabbitmq-scaledobject -n saevecke
-    for index in "$@:3"
+    for index in "${@:3}"
     do
         microk8s kubectl apply -f "$index"
         sleep 10
