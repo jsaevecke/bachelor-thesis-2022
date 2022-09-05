@@ -9,6 +9,6 @@ for iteration in $(seq "${iterations}"); do
         microk8s kubectl apply -f "$index"
         sleep 10
     done
-    source monitor_replias.sh "${iteration}_${2}_replicas_log.txt"
+    source ./monitor_replias.sh "${iteration}_${2}_replicas_log.txt"
     java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX="${iteration}_${2}" -jar ./learner.jar --spring.rabbitmq.port=30640
 done
