@@ -4,10 +4,10 @@ iterations=${1}
 for iteration in $(seq "${iterations}"); do
     microk8s kubectl delete deployment coffee-sul -n saevecke
     microk8s kubectl delete scaledobject rabbitmq-scaledobject -n saevecke
-    for index in "${@:3}"
+    for index in "${@:4}"
     do
         microk8s kubectl apply -f "$index"
-        sleep 10
+        sleep "${3}"
     done
     source ./monitor-replicas.sh "${iteration}_${2}_replicas_log.txt"
     java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX="${iteration}_${2}" -jar ./learner.jar --spring.rabbitmq.port=30640
