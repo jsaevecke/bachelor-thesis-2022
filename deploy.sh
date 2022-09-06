@@ -16,3 +16,4 @@ for iteration in $(seq "${iterations}"); do
     java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX="${iteration}_${2}" -jar ./learner.jar --spring.rabbitmq.port=30640
     kill ${RUNNING_PID}
 done
+microk8s kubectl delete deployment coffee-sul -n saevecke
