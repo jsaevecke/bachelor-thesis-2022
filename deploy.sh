@@ -11,7 +11,7 @@ for iteration in $(seq "${iterations}"); do
         sleep "${3}"
     done
 
-    source ./monitor-replicas.sh "${iteration}_${2}_replicas_log.txt" &
+    source ./monitor-replicas.sh "${iteration}_${2}replicas_log.txt" &
     RUNNING_PID=$!
     java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX="${iteration}_${2}" -jar ./learner.jar --spring.rabbitmq.port=30640
     kill ${RUNNING_PID}

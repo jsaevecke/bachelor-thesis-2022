@@ -5,3 +5,5 @@ java -jar learner.jar -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=run_
 java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=keda_ql1_min2_run_ -jar learner.jar --spring.rabbitmq.port=30640
 
 amqp://localhost:30640/
+
+source deploy.sh 10 fixed_1 20 ./resources/deployment/graalvm/setups/fixed/deployment-1.yaml
