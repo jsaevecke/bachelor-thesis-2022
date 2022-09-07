@@ -58,8 +58,6 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
                     continue;
                 }
 
-                System.out.println("Answered: " + queriesAnswered + " - Sent: " + sentQueries.size());
-
                 var query = (MembershipQuery)message;
                 if(sentQueries.containsKey(query.getUuid())) {
                     long responseCompletedTime = System.nanoTime();
@@ -104,6 +102,8 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
                 if(statistics.minProcessingTime > processingTime) {
                     statistics.minProcessingTime = processingTime;
                 }
+
+                System.out.println("Answered: " + queriesAnswered + " - Sent: " + sentQueries.size());
             }
 
             sentQueries.clear();
