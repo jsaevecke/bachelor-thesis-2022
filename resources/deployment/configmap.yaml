@@ -12,3 +12,8 @@ data:
   delay_enabled_random: "false"
   max_random_delay_in_seconds: "5"
   min_random_delay_in_seconds: "1"
+  rabbitmq_retry: "true"
+  rabbitmq_retry_interval: "100"
+  rabbitmq_retry_attempts: "3"
+  rabbitmq_retry_max_interval: "100"
+  rabbitmq_retry_multiplier: "1"

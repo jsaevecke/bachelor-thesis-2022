@@ -78,3 +78,8 @@ spec:
               secretKeyRef:
                 name: rabbitmq-secret
                 key: RABBIT_PASSWORD
+          - name : SPRING_RABBITMQ_TEMPLATE_RETRY_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: rabbitmq_retry
