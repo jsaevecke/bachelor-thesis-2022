@@ -30,23 +30,14 @@ public class SulGraalVMApplication {
 	@Value("${MY_POD_NAME:local}")
 	private String hostname = "UNKNOWN";
 
-	@Value("${EXIT_STATUS:0}")
-	private int exitStatus = 0;
+	@Value("${ENABLE_SYMBOL_DELAY:false}")
+	public boolean symbolDelayEnabled = false;
 
-	@Value("${ENABLE_DELAY:false}")
-	public boolean delayEnabled = false;
+	@Value("${MAX_DELAY_PER_SYMBOL_MS:5000}")
+	public int maxDelayPerSymbolMS = 5000;
 
-	@Value("${DELAY_IN_SECONDS:0}")
-	public int delayInSeconds = 0;
-
-	@Value("${ENABLE_RANDOM_DELAY:false}")
-	public boolean randomDelayEnabled = false;
-
-	@Value("${MAX_RANDOM_DELAY_IN_SECONDS:5000}")
-	public int maxRandomDelayInMS = 5000;
-
-	@Value("${MIN_RANDOM_DELAY_IN_SECONDS:3000}")
-	public int minRandomDelayInMS = 3000;
+	@Value("${MIN_DELAY_PER_SYMBOL_MS:3000}")
+	public int minDelayPerSymbolMS = 3000;
 
 	public static void
 	main(String[] args) {
@@ -83,10 +74,10 @@ public class SulGraalVMApplication {
 
 			long processingStartTime = System.nanoTime();
 
-			long waitTime = membershipQuery.getQuery().getSuffix().stream().map(s->new Random().nextInt(maxRandomDelayInMS - minRandomDelayInMS + 1) + minRandomDelayInMS).reduce(0, Integer::sum);
-			waitTime += membershipQuery.getQuery().getPrefix().stream().map(s->new Random().nextInt(maxRandomDelayInMS - minRandomDelayInMS + 1) + minRandomDelayInMS).reduce(0, Integer::sum);
+			if(symbolDelayEnabled) {
+				long waitTime = membershipQuery.getQuery().getSuffix().stream().map(s->new Random().nextInt(maxDelayPerSymbolMS - minDelayPerSymbolMS + 1) + minDelayPerSymbolMS).reduce(0, Integer::sum);
+				waitTime += membershipQuery.getQuery().getPrefix().stream().map(s->new Random().nextInt(maxDelayPerSymbolMS - minDelayPerSymbolMS + 1) + minDelayPerSymbolMS).reduce(0, Integer::sum);
 
-			if(delayEnabled) {
 				while(true){
 					System.out.println("Sleeping: " + waitTime + "..");
 					try {
@@ -123,7 +114,6 @@ public class SulGraalVMApplication {
 					sul.step(input);
 				}
 
-				// Suffix: Execute symbols, outputs constitute output word
 				var wb = new WordBuilder<String>(suffix.size());
 				for (var input : suffix) {
 					wb.add(sul.step(input));
@@ -155,7 +145,7 @@ public class SulGraalVMApplication {
 
 		System.out.println("I'm completely full.. I need a short nap.. Bye!");
 
-		SpringApplication.exit(appContext, () -> exitStatus);
-		System.exit(exitStatus);
+		SpringApplication.exit(appContext, () -> 0);
+		System.exit(0);
 	}
 }

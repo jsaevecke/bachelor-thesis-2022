@@ -24,36 +24,21 @@ spec:
         ports:
         - containerPort: 80
         env:
-          - name: EXIT_STATUS
+          - name: ENABLE_SYMBOL_DELAY
             valueFrom:
               configMapKeyRef:
                 name: configmap
-                key: exit_status
-          - name: ENABLE_DELAY
+                key: symbol_delay_enabled
+          - name: MAX_DELAY_PER_SYMBOL_MS
             valueFrom:
               configMapKeyRef:
                 name: configmap
-                key: delay_enabled
-          - name: ENABLE_RANDOM_DELAY
+                key: max_delay_per_symbol_ms
+          - name: MIN_DELAY_PER_SYMBOL_MS
             valueFrom:
               configMapKeyRef:
                 name: configmap
-                key: delay_enabled_random
-          - name: DELAY_IN_SECONDS
-            valueFrom:
-              configMapKeyRef:
-                name: configmap
-                key: delay_in_seconds
-          - name: MAX_RANDOM_DELAY_IN_SECONDS
-            valueFrom:
-              configMapKeyRef:
-                name: configmap
-                key: max_random_delay_in_seconds
-          - name: MIN_RANDOM_DELAY_IN_SECONDS
-            valueFrom:
-              configMapKeyRef:
-                name: configmap
-                key: min_random_delay_in_seconds
+                key: min_delay_per_symbol_ms
           - name: MY_POD_NAME
             valueFrom:
               fieldRef:
@@ -78,8 +63,3 @@ spec:
               secretKeyRef:
                 name: rabbitmq-secret
                 key: RABBIT_PASSWORD
-          - name : SPRING_RABBITMQ_TEMPLATE_RETRY_ENABLED
-            valueFrom:
-              configMapKeyRef:
-                name: configmap
-                key: rabbitmq_retry
