@@ -2,9 +2,12 @@ package com.julien.saevecke.sulnative;
 
 import com.julien.saevecke.sulnative.configurations.RabbitMQ;
 import com.julien.saevecke.shared.messages.MembershipQuery;
+import com.rabbitmq.client.Channel;
 import de.learnlib.api.SUL;
 import net.automatalib.words.WordBuilder;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.messaging.handler.annotation.Header;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -45,8 +50,9 @@ public class SulGraalVMApplication {
 		SpringApplication.run(SulGraalVMApplication.class, args);
 	}
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void consume() {
+	@RabbitListener(queues = RabbitMQ.SUL_INPUT_QUEUE)
+	public void consume(MembershipQuery membershipQuery, Channel channel,
+						@Header(AmqpHeaders.DELIVERY_TAG) long tag) {
 		System.out.println("Hello my name is " + hostname + " - I'm a SUL devouring any query that comes across me!");
 
 		long podCompletedTime = System.nanoTime();
@@ -55,9 +61,7 @@ public class SulGraalVMApplication {
 		sul.pre();
 		var completed = false;
 		while(!completed) {
-
-			Object message = null;
-
+			/*Object message = null;
 			while(true){
 				try {
 					message = template.receiveAndConvert(RabbitMQ.SUL_INPUT_QUEUE);
@@ -72,7 +76,7 @@ public class SulGraalVMApplication {
 				continue;
 			}
 
-			var membershipQuery = (MembershipQuery) message;
+			var membershipQuery = (MembershipQuery) message;*/
 
 			System.out.println("I received a unique (" + membershipQuery.getUuid() + ") and delicious query: " + membershipQuery.getQuery().getPrefix() + " | " + membershipQuery.getQuery().getSuffix());
 
@@ -137,6 +141,7 @@ public class SulGraalVMApplication {
 								RabbitMQ.SUL_OUTPUT_ROUTING_KEY,
 								response
 						);
+						channel.basicAck(tag, false);
 						break;
 					} catch (Exception e){
 						e.printStackTrace();
