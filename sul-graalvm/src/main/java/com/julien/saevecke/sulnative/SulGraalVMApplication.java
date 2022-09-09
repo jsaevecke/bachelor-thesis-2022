@@ -56,6 +56,8 @@ public class SulGraalVMApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void consume() {
+		System.out.println("Hello my name is " + hostname + " - I'm a SUL devouring any query that comes across me!");
+
 		long podCompletedTime = System.nanoTime();
 		long podTimeElapsed = podCompletedTime - podStartTime;
 
@@ -68,16 +70,23 @@ public class SulGraalVMApplication {
 			}
 			var membershipQuery = (MembershipQuery) message;
 
-			System.out.println(hostname + " received message with uuid: " + membershipQuery.getUuid());
+			System.out.println("I received a unique (" + membershipQuery.getUuid() + ") and delicious query: " + membershipQuery.getQuery().getPrefix() + " | " + membershipQuery.getQuery().getSuffix());
 
 			long processingStartTime = System.nanoTime();
 
 			if(delayEnabled) {
+				var delayMessageSuffix = " should suffice till it has the right temperature to be eaten!";
+				var delayMessagePrefix = "The query is still too hot for me..";
 				try {
 					if(randomDelayEnabled) {
+						delayMessagePrefix += " I guess ";
 						delayInSeconds = new Random().nextInt(maxRandomDelayInSeconds - minRandomDelayInSeconds + 1) + minRandomDelayInSeconds;
+					} else {
+						delayMessagePrefix += " I'm pretty sure ";
 					}
+					System.out.println(delayMessagePrefix + delayInSeconds + " seconds" + delayMessageSuffix);
 					TimeUnit.SECONDS.sleep(delayInSeconds);
+					System.out.println("I've waited long enough - time to eat!");
 				} catch (InterruptedException ie) {
 					Thread.currentThread().interrupt();
 				}
@@ -115,6 +124,8 @@ public class SulGraalVMApplication {
 
 			completed = true;
 		}
+
+		System.out.println("I'm completely full.. I need a short nap.. Bye!");
 
 		SpringApplication.exit(appContext, () -> exitStatus);
 		System.exit(exitStatus);
