@@ -1,6 +1,8 @@
 package com.julien.saevecke.learnerjvm.mealy;
 
 import net.automatalib.automata.transducers.impl.compact.CompactMealy;
+import net.automatalib.serialization.dot.DOTGraphParser;
+import net.automatalib.serialization.dot.DOTParsers;
 import net.automatalib.util.automata.builders.AutomatonBuilders;
 import net.automatalib.words.impl.Alphabets;
 
@@ -17,6 +19,8 @@ public class CoffeeConcrete {
     public CompactMealy<String, String> coffeeMachine() {
         var alphabet = Alphabets.fromArray(POD, CLEAN, WATER, BUTTON);
         var automaton = new CompactMealy<String, String>(alphabet);
+
+        //var bla = DOTParsers.mealy().readModel()
 
         // @formatter:off
         return AutomatonBuilders.forMealy(automaton)

@@ -42,11 +42,11 @@ public class SulGraalVMApplication {
 	@Value("${ENABLE_RANDOM_DELAY:false}")
 	public boolean randomDelayEnabled = false;
 
-	@Value("${MAX_RANDOM_DELAY_IN_SECONDS:5}")
-	public int maxRandomDelayInSeconds = 5;
+	@Value("${MAX_RANDOM_DELAY_IN_SECONDS:5000}")
+	public int maxRandomDelayInMS = 5000;
 
-	@Value("${MIN_RANDOM_DELAY_IN_SECONDS:1}")
-	public int minRandomDelayInSeconds = 1;
+	@Value("${MIN_RANDOM_DELAY_IN_SECONDS:3000}")
+	public int minRandomDelayInMS = 3000;
 
 	public static void
 	main(String[] args) {
@@ -64,23 +64,44 @@ public class SulGraalVMApplication {
 		sul.pre();
 		var completed = false;
 		while(!completed) {
-			var message = template.receiveAndConvert(RabbitMQ.SUL_INPUT_QUEUE);
+
+			Object message = null;
+
+			try {
+				message = template.receiveAndConvert(RabbitMQ.SUL_INPUT_QUEUE);
+			} catch (Exception e){
+				e.printStackTrace();
+				System.out.println("receiving failed");
+			}
 			if (message == null) {
 				continue;
 			}
+
 			var membershipQuery = (MembershipQuery) message;
 
 			System.out.println("I received a unique (" + membershipQuery.getUuid() + ") and delicious query: " + membershipQuery.getQuery().getPrefix() + " | " + membershipQuery.getQuery().getSuffix());
 
 			long processingStartTime = System.nanoTime();
 
+			long waitTime = membershipQuery.getQuery().getSuffix().stream().map(s->new Random().nextInt(maxRandomDelayInMS - minRandomDelayInMS + 1) + minRandomDelayInMS).reduce(0, Integer::sum);
+			waitTime += membershipQuery.getQuery().getPrefix().stream().map(s->new Random().nextInt(maxRandomDelayInMS - minRandomDelayInMS + 1) + minRandomDelayInMS).reduce(0, Integer::sum);
+
 			if(delayEnabled) {
-				var delayMessageSuffix = " should suffice till it has the right temperature to be eaten!";
+				while(true){
+					System.out.println("Sleeping: " + waitTime + "..");
+					try {
+						Thread.sleep(waitTime);
+						break;
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				/*var delayMessageSuffix = " should suffice till it has the right temperature to be eaten!";
 				var delayMessagePrefix = "The query is still too hot for me..";
 				try {
 					if(randomDelayEnabled) {
 						delayMessagePrefix += " I guess ";
-						delayInSeconds = new Random().nextInt(maxRandomDelayInSeconds - minRandomDelayInSeconds + 1) + minRandomDelayInSeconds;
+						delayInSeconds = new Random().nextInt(maxRandomDelayInMS - minRandomDelayInMS + 1) + minRandomDelayInMS;
 					} else {
 						delayMessagePrefix += " I'm pretty sure ";
 					}
@@ -88,8 +109,9 @@ public class SulGraalVMApplication {
 					TimeUnit.SECONDS.sleep(delayInSeconds);
 					System.out.println("I've waited long enough - time to eat!");
 				} catch (InterruptedException ie) {
+					ie.printStackTrace();
 					Thread.currentThread().interrupt();
-				}
+				}*/
 			}
 
 			var query = membershipQuery.getQuery();
@@ -113,11 +135,17 @@ public class SulGraalVMApplication {
 				long processingTimeElapsed = processingCompletedTime - processingStartTime;
 
 				var response = new MembershipQuery(membershipQuery.getUuid(), hostname, membershipQuery.getQuery(), podTimeElapsed, processingTimeElapsed);
-				template.convertAndSend(
-						RabbitMQ.SUL_DIRECT_EXCHANGE,
-						RabbitMQ.SUL_OUTPUT_ROUTING_KEY,
-						response
-				);
+
+				try {
+					template.convertAndSend(
+							RabbitMQ.SUL_DIRECT_EXCHANGE,
+							RabbitMQ.SUL_OUTPUT_ROUTING_KEY,
+							response
+					);
+				} catch (Exception e){
+					e.printStackTrace();
+					System.out.println("sending failed");
+				}
 			} finally {
 				sul.post();
 			}
