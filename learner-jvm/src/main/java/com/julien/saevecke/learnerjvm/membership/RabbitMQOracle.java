@@ -45,11 +45,19 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
 
             System.out.println("Distributing delicious query: " + query.getQuery().getPrefix() + " | " + query.getQuery().getSuffix());
 
-            template.convertAndSend(
-                    RabbitMQ.SUL_DIRECT_EXCHANGE,
-                    RabbitMQ.SUL_INPUT_ROUTING_KEY,
-                    query
-            );
+            while(true){
+                try {
+                    template.convertAndSend(
+                            RabbitMQ.SUL_DIRECT_EXCHANGE,
+                            RabbitMQ.SUL_INPUT_ROUTING_KEY,
+                            query
+                    );
+                    break;
+                } catch (Exception e){
+                    e.printStackTrace();
+                    System.out.println("sending failed");
+                }
+            }
         }
 
         var latch = new CountDownLatch(1);
@@ -58,7 +66,16 @@ public class RabbitMQOracle implements MealyMembershipOracle<String, String> {
 
             System.out.println("Waiting for my precious consumers finishing their delicious query..");
             while(!sentQueries.isEmpty()) {
-                var message = template.receiveAndConvert(RabbitMQ.SUL_OUTPUT_QUEUE);
+                Object message = null;
+                while(true){
+                    try {
+                        message = template.receiveAndConvert(RabbitMQ.SUL_OUTPUT_QUEUE);
+                        break;
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        System.out.println("receiving failed");
+                    }
+                }
                 if (message == null) {
                     continue;
                 }

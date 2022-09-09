@@ -58,12 +58,16 @@ public class SulGraalVMApplication {
 
 			Object message = null;
 
-			try {
-				message = template.receiveAndConvert(RabbitMQ.SUL_INPUT_QUEUE);
-			} catch (Exception e){
-				e.printStackTrace();
-				System.out.println("receiving failed");
+			while(true){
+				try {
+					message = template.receiveAndConvert(RabbitMQ.SUL_INPUT_QUEUE);
+					break;
+				} catch (Exception e){
+					e.printStackTrace();
+					System.out.println("receiving failed");
+				}
 			}
+
 			if (message == null) {
 				continue;
 			}
@@ -126,15 +130,18 @@ public class SulGraalVMApplication {
 
 				var response = new MembershipQuery(membershipQuery.getUuid(), hostname, membershipQuery.getQuery(), podTimeElapsed, processingTimeElapsed);
 
-				try {
-					template.convertAndSend(
-							RabbitMQ.SUL_DIRECT_EXCHANGE,
-							RabbitMQ.SUL_OUTPUT_ROUTING_KEY,
-							response
-					);
-				} catch (Exception e){
-					e.printStackTrace();
-					System.out.println("sending failed");
+				while(true){
+					try {
+						template.convertAndSend(
+								RabbitMQ.SUL_DIRECT_EXCHANGE,
+								RabbitMQ.SUL_OUTPUT_ROUTING_KEY,
+								response
+						);
+						break;
+					} catch (Exception e){
+						e.printStackTrace();
+						System.out.println("sending failed");
+					}
 				}
 			} finally {
 				sul.post();
