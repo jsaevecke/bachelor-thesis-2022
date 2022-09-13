@@ -18,8 +18,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.messaging.handler.annotation.Header;
 
+import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @SpringBootApplication
 public class SulGraalVMApplication {
@@ -61,23 +63,6 @@ public class SulGraalVMApplication {
 		sul.pre();
 		var completed = false;
 		while(!completed) {
-			/*Object message = null;
-			while(true){
-				try {
-					message = template.receiveAndConvert(RabbitMQ.SUL_INPUT_QUEUE);
-					break;
-				} catch (Exception e){
-					e.printStackTrace();
-					System.out.println("receiving failed");
-				}
-			}
-
-			if (message == null) {
-				continue;
-			}
-
-			var membershipQuery = (MembershipQuery) message;*/
-
 			System.out.println("I received a unique (" + membershipQuery.getUuid() + ") and delicious query: " + membershipQuery.getQuery().getPrefix() + " | " + membershipQuery.getQuery().getSuffix());
 
 			long processingStartTime = System.nanoTime();
@@ -95,22 +80,6 @@ public class SulGraalVMApplication {
 						e.printStackTrace();
 					}
 				}
-				/*var delayMessageSuffix = " should suffice till it has the right temperature to be eaten!";
-				var delayMessagePrefix = "The query is still too hot for me..";
-				try {
-					if(randomDelayEnabled) {
-						delayMessagePrefix += " I guess ";
-						delayInSeconds = new Random().nextInt(maxRandomDelayInMS - minRandomDelayInMS + 1) + minRandomDelayInMS;
-					} else {
-						delayMessagePrefix += " I'm pretty sure ";
-					}
-					System.out.println(delayMessagePrefix + delayInSeconds + " seconds" + delayMessageSuffix);
-					TimeUnit.SECONDS.sleep(delayInSeconds);
-					System.out.println("I've waited long enough - time to eat!");
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-					Thread.currentThread().interrupt();
-				}*/
 			}
 
 			var query = membershipQuery.getQuery();
@@ -146,6 +115,7 @@ public class SulGraalVMApplication {
 					} catch (Exception e){
 						e.printStackTrace();
 						System.out.println("sending failed");
+						//basic.Nack...
 					}
 				}
 			} finally {
@@ -157,6 +127,11 @@ public class SulGraalVMApplication {
 
 		System.out.println("I'm completely full.. I need a short nap.. Bye!");
 
+		try {
+			channel.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		SpringApplication.exit(appContext, () -> 0);
 		System.exit(0);
 	}

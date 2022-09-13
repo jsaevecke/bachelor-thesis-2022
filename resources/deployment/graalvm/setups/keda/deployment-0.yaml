@@ -17,6 +17,7 @@ spec:
       annotations:
         kube-remediator/CrashLoopBackOffRemediator: "true"
     spec:
+      terminationGracePeriodSeconds: 90
       containers:
       - name: coffee-sul
         image: pixian/sul:coffee-spring-native-graalvm
