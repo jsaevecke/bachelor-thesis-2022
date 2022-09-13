@@ -32,7 +32,7 @@ spec:
     kind: Deployment
     name: coffee-sul
   pollingInterval: 1  # Optional. Default: 30 seconds
-  cooldownPeriod:  15
+  cooldownPeriod:  45
   minReplicaCount: 0
   triggers:
   - type: rabbitmq
