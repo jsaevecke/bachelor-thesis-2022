@@ -14,18 +14,23 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.messaging.handler.annotation.Header;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 @SpringBootApplication
 public class SulGraalVMApplication {
 	private static long podStartTime;
+
+	private boolean completedWork = false;
 
 	@Autowired
 	private SUL<String, String> sul;
@@ -50,6 +55,15 @@ public class SulGraalVMApplication {
 	main(String[] args) {
 		podStartTime = System.nanoTime();
 		SpringApplication.run(SulGraalVMApplication.class, args);
+	}
+
+	@EventListener
+	public void handleContextRefreshEvent(ContextClosedEvent ctxClosedEvt) {
+		if(completedWork) {
+
+		} else {
+
+		}
 	}
 
 	@RabbitListener(queues = RabbitMQ.SUL_INPUT_QUEUE)
@@ -111,6 +125,7 @@ public class SulGraalVMApplication {
 								response
 						);
 						channel.basicAck(tag, false);
+						completedWork = true;
 						break;
 					} catch (Exception e){
 						e.printStackTrace();
