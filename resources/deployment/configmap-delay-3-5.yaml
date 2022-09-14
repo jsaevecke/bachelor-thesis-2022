@@ -6,9 +6,9 @@ metadata:
 data:
   rabbitmq_port: "5672"
   rabbitmq_host: "mu-rabbit-rabbitmq.saevecke.svc.cluster.local"
-  symbol_delay_enabled: "false"
-  max_delay_per_symbol_ms: "0"
-  min_delay_per_symbol_ms: "0"
+  symbol_delay_enabled: "true"
+  max_delay_per_symbol_ms: "5000"
+  min_delay_per_symbol_ms: "3000"
   rabbitmq_retry: "true"
   rabbitmq_retry_interval: "100"
   rabbitmq_retry_attempts: "3"
