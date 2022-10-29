@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: delaymap
+  namespace: saevecke
+data:
+  symbol_delay_enabled: "true"
+  max_delay_per_symbol_ms: "150"
+  min_delay_per_symbol_ms: "100"

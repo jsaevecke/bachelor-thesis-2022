@@ -14,7 +14,6 @@ import java.util.UUID;
 @ToString
 public class MembershipQuery implements Serializable {
     private static final long serialVersionUID = 1234635319693213385L;
-
     public MembershipQuery(UUID uuid, DefaultQueryProxy query) {
         this.uuid = uuid;
         this.query = query;
@@ -30,4 +29,5 @@ public class MembershipQuery implements Serializable {
     // statistics
     private long podStartUpTime;
     private long podProcessingTime;
+    private long podWaitTime;
 }

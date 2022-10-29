@@ -1,1 +1,0 @@
-java -DspringAot=true -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image -jar target/sul-graalvm-0.0.1.jar

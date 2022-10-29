@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mealymap
+  namespace: saevecke
+data:
+  mealy_machine_type: "linux-tcp-server"

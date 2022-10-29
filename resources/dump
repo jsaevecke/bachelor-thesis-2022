@@ -1,0 +1,17 @@
+
+microk8s kubectl port-forward --namespace saevecke svc/mu-rabbit-rabbitmq 5672:5672
+
+java -jar learner.jar -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=run_
+java -DSAVE_RESULTS_TO_FILE=true -DFILENAME_PREFIX=keda_ql1_min2_run_ -jar learner.jar --spring.rabbitmq.port=30640
+
+amqp://localhost:30640/
+
+source deploy.sh 10 fixed_1 20 ./resources/deployment/graalvm/setups/fixed/deployment-1.yaml
+
+<(.*)>
+
+
+screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill  #kill all detached
+screen -rd <id> //reattach to attached/detached
+
+java -DspringAot=true -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image -jar target/sul-graalvm-0.0.1.jar

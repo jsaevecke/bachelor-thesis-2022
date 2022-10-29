@@ -9,6 +9,13 @@ public class Statistics {
     public long averageNextResponseTime = 0;
     public long averageBatchProcessingTime = 0;
     public long averageBatchSize = 0;
+    public long averageWaitTime = 0;
+    public long averageSequenceLength = 0;
+
+    public long maxWaitTime = 0;
+    public long minWaitTime = Long.MAX_VALUE;
+    public long minSequenceLength = Long.MAX_VALUE;
+    public long maxSequenceLength = 0;
 
     public long maxProcessingTime = 0;
     public long minProcessingTime = Long.MAX_VALUE;
@@ -28,25 +35,29 @@ public class Statistics {
 
     @Override
     public String toString() {
-        return "Statistics{" +
-                "averageProcessingTime=" + averageProcessingTime +
-                ", averageStartUpTime=" + averageStartUpTime +
-                ", averageNextResponseTime=" + averageNextResponseTime +
-                ", averageBatchProcessingTime=" + averageBatchProcessingTime +
-                ", averageBatchSize=" + averageBatchSize +
-                ", maxProcessingTime=" + maxProcessingTime +
-                ", minProcessingTime=" + minProcessingTime +
-                ", maxStartUpTime=" + maxStartUpTime +
-                ", minStartUpTime=" + minStartUpTime +
-                ", maxNextResponseTime=" + maxNextResponseTime +
-                ", minNextResponseTime=" + minNextResponseTime +
-                ", minBatchProcessingTime=" + minBatchProcessingTime +
-                ", maxBatchProcessingTime=" + maxBatchProcessingTime +
-                ", maxBatchSize=" + maxBatchSize +
-                ", minBatchSize=" + minBatchSize +
-                ", totalSentQueries=" + totalSentQueries +
-                ", totalBatches=" + totalBatches +
-                ", totalLearnTime=" + totalLearnTime +
-                '}';
+        return  "," + minProcessingTime +
+                "," + maxProcessingTime +
+                "," + averageProcessingTime +
+                "," + minStartUpTime +
+                "," + maxStartUpTime +
+                "," + averageStartUpTime +
+                "," + minNextResponseTime +
+                "," + maxNextResponseTime +
+                "," + averageNextResponseTime +
+                "," + minBatchProcessingTime +
+                "," + maxBatchProcessingTime +
+                "," + averageBatchProcessingTime +
+                "," + minBatchSize +
+                "," + maxBatchSize +
+                "," + averageBatchSize +
+                "," + minSequenceLength +
+                "," + maxSequenceLength +
+                "," + averageSequenceLength +
+                "," + minWaitTime +
+                "," + maxWaitTime +
+                "," + averageWaitTime +
+                "," + totalSentQueries +
+                "," + totalBatches +
+                "," + totalLearnTime;
     }
 }

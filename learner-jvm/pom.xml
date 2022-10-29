@@ -80,12 +80,6 @@
             <version>0.16.0</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>de.learnlib</groupId>
-            <artifactId>learnlib-cache</artifactId>
-            <version>0.16.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>

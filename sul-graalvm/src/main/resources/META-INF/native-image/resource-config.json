@@ -5,6 +5,9 @@
       "pattern":"\\QMETA-INF/services/net.automatalib.AutomataLibSettingsSource\\E"
     }, 
     {
+      "pattern":"\\QMETA-INF/spring.components\\E"
+    }, 
+    {
       "pattern":"\\Qapplication.properties\\E"
     }, 
     {

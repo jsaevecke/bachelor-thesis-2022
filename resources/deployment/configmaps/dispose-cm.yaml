@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: usagemap
+  namespace: saevecke
+data:
+  one_use_enabled: "true"

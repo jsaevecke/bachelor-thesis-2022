@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sul
+  namespace: saevecke
+  labels:
+    app: sul
+spec:
+  selector:
+    matchLabels:
+      app: sul
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: sul
+      annotations:
+        kube-remediator/CrashLoopBackOffRemediator: "true"
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: sul
+        image: pixian/sul:latest-1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+          - name: FILE_COMMAND
+            valueFrom:
+              configMapKeyRef:
+                name: filemap
+                key: file_command
+          - name: MEALY_MACHINE_TYPE
+            valueFrom:
+              configMapKeyRef:
+                name: mealymap
+                key: mealy_machine_type
+          - name: ENABLE_ONE_USE
+            valueFrom:
+              configMapKeyRef:
+                name: usagemap
+                key: one_use_enabled
+          - name: ENABLE_SYMBOL_DELAY
+            valueFrom:
+              configMapKeyRef:
+                name: delaymap
+                key: symbol_delay_enabled
+          - name: MAX_DELAY_PER_SYMBOL_MS
+            valueFrom:
+              configMapKeyRef:
+                name: delaymap
+                key: max_delay_per_symbol_ms
+          - name: MIN_DELAY_PER_SYMBOL_MS
+            valueFrom:
+              configMapKeyRef:
+                name: delaymap
+                key: min_delay_per_symbol_ms
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: SPRING_RABBITMQ_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: rabbitmap
+                key: rabbitmq_host
+          - name: SPRING_RABBITMQ_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: rabbitmap
+                key: rabbitmq_port
+          - name: SPRING_RABBITMQ_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq-secret
+                key: RABBIT_USERNAME
+          - name: SPRING_RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq-secret
+                key: RABBIT_PASSWORD

@@ -1,51 +1,91 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: coffee-sul
+  name: sul
   namespace: saevecke
   labels:
-    app: coffee-sul
+    app: sul
 spec:
   selector:
     matchLabels:
-      app: coffee-sul
+      app: sul
   replicas: 0
   template:
     metadata:
       labels:
-        app: coffee-sul
+        app: sul
       annotations:
         kube-remediator/CrashLoopBackOffRemediator: "true"
     spec:
-      terminationGracePeriodSeconds: 600
+      volumes:
+        #- name: check-file-script
+        #  configMap:
+        #    name: check-file-script
+        #    defaultMode: 0777
+        #- name: tmp
+        #  emptyDir: {}
+      terminationGracePeriodSeconds: 10
       containers:
-      - name: coffee-sul
-        image: pixian/sul:coffee-spring-native-graalvm
-        imagePullPolicy: Always
+      - name: sul
+        image: pixian/sul:latest-1
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
-        lifecycle:
-          preStop:
-            exec:
-              command: [
-                "sh", "-c",
-                "sleep 40",
-              ]
+        #volumeMounts:
+          #- mountPath: /script
+          #  subPath: script
+          #  name: check-file-script
+          #- mountPath: /root
+          #  subPath: root
+          #  name: tmp
+        #lifecycle:
+          #preStop:
+          #  exec:
+          #    command: [
+          #      "sh", "-c",
+          #      "sleep 40",
+          #    ]
+            #  command: ["/bin/sh", "-c", "/script/checkfile.sh"]
         env:
+          - name: FILE_COMMAND
+            valueFrom:
+              configMapKeyRef:
+                name: filemap
+                key: file_command
+          - name: FINISHED_FILE_PATH
+            valueFrom:
+              configMapKeyRef:
+                name: filemap
+                key: finished_file_path
+          - name: ENABLE_CREATE_FINISHED_FILE
+            valueFrom:
+              configMapKeyRef:
+                name: filemap
+                key: enable_create_finished_file
+          - name: MEALY_MACHINE_TYPE
+            valueFrom:
+              configMapKeyRef:
+                name: mealymap
+                key: mealy_machine_type
+          - name: ENABLE_ONE_USE
+            valueFrom:
+              configMapKeyRef:
+                name: usagemap
+                key: one_use_enabled
           - name: ENABLE_SYMBOL_DELAY
             valueFrom:
               configMapKeyRef:
-                name: configmap
+                name: delaymap
                 key: symbol_delay_enabled
           - name: MAX_DELAY_PER_SYMBOL_MS
             valueFrom:
               configMapKeyRef:
-                name: configmap
+                name: delaymap
                 key: max_delay_per_symbol_ms
           - name: MIN_DELAY_PER_SYMBOL_MS
             valueFrom:
               configMapKeyRef:
-                name: configmap
+                name: delaymap
                 key: min_delay_per_symbol_ms
           - name: MY_POD_NAME
             valueFrom:
@@ -54,12 +94,12 @@ spec:
           - name: SPRING_RABBITMQ_HOST
             valueFrom:
               configMapKeyRef:
-                name: configmap
+                name: rabbitmap
                 key: rabbitmq_host
           - name: SPRING_RABBITMQ_PORT
             valueFrom:
               configMapKeyRef:
-                name: configmap
+                name: rabbitmap
                 key: rabbitmq_port
           - name: SPRING_RABBITMQ_USERNAME
             valueFrom:
@@ -71,3 +111,8 @@ spec:
               secretKeyRef:
                 name: rabbitmq-secret
                 key: RABBIT_PASSWORD
+          - name: SPRING_RABBITMQ_LISTENER_SIMPLE_PREFETCH
+            valueFrom:
+              configMapKeyRef:
+                name: rabbitmap
+                key: rabbitmq_prefetch

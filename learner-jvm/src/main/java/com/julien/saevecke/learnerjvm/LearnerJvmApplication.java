@@ -1,7 +1,7 @@
 package com.julien.saevecke.learnerjvm;
 
 import com.julien.saevecke.learnerjvm.configurations.RabbitMQ;
-import com.julien.saevecke.learnerjvm.mealy.Coffee;
+import com.julien.saevecke.learnerjvm.mealy.Experiment;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +15,8 @@ import java.io.IOException;
 
 @SpringBootApplication
 public class LearnerJvmApplication {
-
     @Autowired
-    private Coffee coffeeExperiment;
+    private Experiment experiment;
 
     @Autowired
     private RabbitAdmin admin;
@@ -42,7 +41,7 @@ public class LearnerJvmApplication {
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void run() {
+    public void run() throws IOException {
         if(sulDeployEnabled) {
             ProcessBuilder processBuilder = new ProcessBuilder();
 
@@ -60,6 +59,6 @@ public class LearnerJvmApplication {
             admin.purgeQueue(RabbitMQ.SUL_OUTPUT_QUEUE);
         }
 
-        coffeeExperiment.learn();
+        experiment.learn();
     }
 }

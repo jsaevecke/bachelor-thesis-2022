@@ -30,4 +30,5 @@ public class MembershipQuery implements Serializable {
     // statistics
     private long podStartUpTime;
     private long podProcessingTime;
+    private long podWaitTime;
 }

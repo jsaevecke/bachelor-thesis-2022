@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: check-file-script
+  namespace: saevecke
+data:
+  checkfile.sh: |
+    FILE=/root/finished
+    while true
+    do
+      if test -f "$FILE"; then
+        echo "$FILE exists."
+        exit 0
+      else
+        echo "file does not exist"
+        sleep 1s
+      fi
+    done

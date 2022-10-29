@@ -9,6 +9,15 @@
   "name":"[Ljava.lang.String;"
 },
 {
+  "name":"[Ljava.lang.annotation.Annotation;"
+},
+{
+  "name":"[Lorg.springframework.amqp.rabbit.annotation.Queue;"
+},
+{
+  "name":"[Lorg.springframework.amqp.rabbit.annotation.QueueBinding;"
+},
+{
   "name":"[Lorg.springframework.boot.context.config.ConfigDataLocation;"
 },
 {
@@ -89,11 +98,13 @@
     {"name":"getPodName","parameterTypes":[] }, 
     {"name":"getPodProcessingTime","parameterTypes":[] }, 
     {"name":"getPodStartUpTime","parameterTypes":[] }, 
+    {"name":"getPodWaitTime","parameterTypes":[] }, 
     {"name":"getQuery","parameterTypes":[] }, 
     {"name":"getUuid","parameterTypes":[] }, 
     {"name":"setPodName","parameterTypes":["java.lang.String"] }, 
     {"name":"setPodProcessingTime","parameterTypes":["long"] }, 
     {"name":"setPodStartUpTime","parameterTypes":["long"] }, 
+    {"name":"setPodWaitTime","parameterTypes":["long"] }, 
     {"name":"setQuery","parameterTypes":["com.julien.saevecke.shared.messages.DefaultQueryProxy"] }, 
     {"name":"setUuid","parameterTypes":["java.util.UUID"] }
   ]
@@ -103,7 +114,8 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "methods":[
-    {"name":"consume","parameterTypes":[] }, 
+    {"name":"consume","parameterTypes":["com.julien.saevecke.shared.messages.MembershipQuery","com.rabbitmq.client.Channel","long"] }, 
+    {"name":"handleApplicationReadyEvent","parameterTypes":[] }, 
     {"name":"main","parameterTypes":["java.lang.String[]"] }
   ]
 },
@@ -112,17 +124,21 @@
   "queryAllDeclaredMethods":true
 },
 {
-  "name":"com.julien.saevecke.sulnative.mealy.Coffee",
+  "name":"com.julien.saevecke.sulnative.mealy.Experiment",
   "queryAllDeclaredMethods":true
 },
 {
   "name":"com.rabbitmq.client.Channel",
   "methods":[
-    {"name":"basicGet","parameterTypes":["java.lang.String","boolean"] }, 
+    {"name":"basicAck","parameterTypes":["long","boolean"] }, 
+    {"name":"basicCancel","parameterTypes":["java.lang.String"] }, 
+    {"name":"basicConsume","parameterTypes":["java.lang.String","boolean","java.lang.String","boolean","boolean","java.util.Map","com.rabbitmq.client.Consumer"] }, 
     {"name":"basicPublish","parameterTypes":["java.lang.String","java.lang.String","boolean","com.rabbitmq.client.AMQP$BasicProperties","byte[]"] }, 
+    {"name":"basicQos","parameterTypes":["int","boolean"] }, 
     {"name":"exchangeDeclare","parameterTypes":["java.lang.String","java.lang.String","boolean","boolean","boolean","java.util.Map"] }, 
     {"name":"queueBind","parameterTypes":["java.lang.String","java.lang.String","java.lang.String","java.util.Map"] }, 
-    {"name":"queueDeclare","parameterTypes":["java.lang.String","boolean","boolean","boolean","java.util.Map"] }
+    {"name":"queueDeclare","parameterTypes":["java.lang.String","boolean","boolean","boolean","java.util.Map"] }, 
+    {"name":"queueDeclarePassive","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -132,14 +148,6 @@
 {
   "name":"com.sun.crypto.provider.TlsMasterSecretGenerator",
   "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"de.learnlib.api.SUL",
-  "queryAllPublicMethods":true
-},
-{
-  "name":"de.learnlib.driver.util.MealySimulatorSUL",
-  "queryAllDeclaredMethods":true
 },
 {
   "name":"java.io.FilePermission"
@@ -311,8 +319,44 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"org.springframework.amqp.rabbit.annotation.Argument",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.springframework.amqp.rabbit.annotation.EnableRabbit",
   "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.amqp.rabbit.annotation.Exchange",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.amqp.rabbit.annotation.QueueBinding",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.amqp.rabbit.annotation.RabbitListener",
+  "queryAllDeclaredMethods":true,
+  "methods":[
+    {"name":"ackMode","parameterTypes":[] }, 
+    {"name":"admin","parameterTypes":[] }, 
+    {"name":"autoStartup","parameterTypes":[] }, 
+    {"name":"bindings","parameterTypes":[] }, 
+    {"name":"concurrency","parameterTypes":[] }, 
+    {"name":"containerFactory","parameterTypes":[] }, 
+    {"name":"errorHandler","parameterTypes":[] }, 
+    {"name":"exclusive","parameterTypes":[] }, 
+    {"name":"executor","parameterTypes":[] }, 
+    {"name":"group","parameterTypes":[] }, 
+    {"name":"id","parameterTypes":[] }, 
+    {"name":"messageConverter","parameterTypes":[] }, 
+    {"name":"priority","parameterTypes":[] }, 
+    {"name":"queues","parameterTypes":[] }, 
+    {"name":"queuesToDeclare","parameterTypes":[] }, 
+    {"name":"replyContentType","parameterTypes":[] }, 
+    {"name":"replyPostProcessor","parameterTypes":[] }, 
+    {"name":"returnExceptions","parameterTypes":[] }
+  ]
 },
 {
   "name":"org.springframework.amqp.rabbit.config.AbstractRabbitListenerContainerFactory",
@@ -401,6 +445,9 @@
 {
   "name":"org.springframework.amqp.support.converter.SmartMessageConverter",
   "queryAllPublicMethods":true
+},
+{
+  "name":"org.springframework.aop.scope.ScopedObject"
 },
 {
   "name":"org.springframework.aot.ContextBootstrapInitializer",
@@ -558,11 +605,36 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[
+    {"name":"getListener","parameterTypes":[] }, 
     {"name":"setHost","parameterTypes":["java.lang.String"] }, 
     {"name":"setPassword","parameterTypes":["java.lang.String"] }, 
     {"name":"setPort","parameterTypes":["java.lang.Integer"] }, 
     {"name":"setUsername","parameterTypes":["java.lang.String"] }
   ]
+},
+{
+  "name":"org.springframework.boot.autoconfigure.amqp.RabbitProperties$AmqpContainer",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"setAcknowledgeMode","parameterTypes":["org.springframework.amqp.core.AcknowledgeMode"] }]
+},
+{
+  "name":"org.springframework.boot.autoconfigure.amqp.RabbitProperties$BaseContainer",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.boot.autoconfigure.amqp.RabbitProperties$Listener",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"getSimple","parameterTypes":[] }]
+},
+{
+  "name":"org.springframework.boot.autoconfigure.amqp.RabbitProperties$SimpleContainer",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer",
@@ -1004,12 +1076,30 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"org.springframework.messaging.handler.annotation.Header",
+  "queryAllDeclaredMethods":true,
+  "methods":[
+    {"name":"defaultValue","parameterTypes":[] }, 
+    {"name":"name","parameterTypes":[] }, 
+    {"name":"required","parameterTypes":[] }, 
+    {"name":"value","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.springframework.messaging.handler.annotation.MessageMapping",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.springframework.stereotype.Component",
   "queryAllDeclaredMethods":true
 },
 {
   "name":"org.springframework.stereotype.Indexed",
   "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.transaction.TransactionDefinition",
+  "allPublicFields":true
 },
 {
   "name":"sun.security.pkcs12.PKCS12KeyStore",

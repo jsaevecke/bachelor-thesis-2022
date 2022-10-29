@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmap
+  namespace: saevecke
+data:
+  rabbitmq_port: "5672"
+  rabbitmq_host: "mu-rabbit-rabbitmq.saevecke.svc.cluster.local"
+  rabbitmq_prefetch: "1"

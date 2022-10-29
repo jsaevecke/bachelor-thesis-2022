@@ -6,6 +6,9 @@
     "interfaces":["java.lang.reflect.WildcardType","org.springframework.core.SerializableTypeWrapper$SerializableTypeProxy","java.io.Serializable"]}
   ,
   {
+    "interfaces":["org.springframework.amqp.rabbit.annotation.RabbitListener","org.springframework.core.annotation.SynthesizedAnnotation"]}
+  ,
+  {
     "interfaces":["org.springframework.amqp.rabbit.connection.ChannelProxy"]}
   ,
   {
@@ -13,5 +16,8 @@
   ,
   {
     "interfaces":["org.springframework.context.event.EventListener","org.springframework.core.annotation.SynthesizedAnnotation"]}
+  ,
+  {
+    "interfaces":["org.springframework.messaging.handler.annotation.Header","org.springframework.core.annotation.SynthesizedAnnotation"]}
   
 ]
