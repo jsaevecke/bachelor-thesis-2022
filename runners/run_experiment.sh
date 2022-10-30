@@ -34,7 +34,7 @@ for iteration in $(seq "${iterations}"); do
       sleep 5
     done
 
-    source ./monitor-replicas.sh "${iteration}_${3}_monitoring.txt" &
+    source ./runners/monitor-replicas.sh "${iteration}_${3}_monitoring.txt" &
     RUNNING_PID=$!
     java -DSAVE_RESULTS_TO_FILE=true -DSAVE_COMPLETED_HYPOTHESIS_MODEL=false -DMEALY_MACHINE_TYPE="${4}" -DSTRATEGY_NAME="${3}" -DFILENAME_PREFIX="${5}" -jar ./learner.jar --spring.rabbitmq.port=30640
     kill ${RUNNING_PID}
