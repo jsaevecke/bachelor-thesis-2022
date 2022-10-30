@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: sul
-  replicas: 96
+  replicas: 80
   template:
     metadata:
       labels:

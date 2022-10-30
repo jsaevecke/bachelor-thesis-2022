@@ -10,7 +10,7 @@ microk8s kubectl apply -f ./resources/deployment/configmaps/coffee-cm.yaml -n sa
 microk8s kubectl apply -f ./resources/deployment/configmaps/no-file-cm.yaml -n saevecke
 
 microk8s kubectl apply -f ./resources/deployment/configmaps/delay-0-0-cm.yaml -n saevecke
-for podCount in 118 96
+for podCount in 80
 do
    strategyName="fixed_p${podCount}_d0%0"
    deploymentFile=./resources/deployment/graalvm/setups/fixed/deployment-"${podCount}".yaml
