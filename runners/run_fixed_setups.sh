@@ -13,7 +13,7 @@ microk8s kubectl apply -f ./resources/deployment/configmaps/delay-0-0-cm.yaml -n
 for podCount in 118 96
 do
    strategyName="fixed_p${podCount}_d0%0"
-   deploymentFile=./resources/deployment/graalvm/setups/fixed/deployment-"${podCount}"-low-gp.yaml
+   deploymentFile=./resources/deployment/graalvm/setups/fixed/deployment-"${podCount}".yaml
   echo "strategy=${strategyName} - pods=${podCount}"
   echo "deployment file: ${deploymentFile}"
   echo "delay: 0 <-> 0"
