@@ -17,5 +17,5 @@ do
   echo "strategy=${strategyName} - pods=${podCount}"
   echo "deployment file: ${deploymentFile}"
   echo "delay: 0 <-> 0"
-  source run_experiment.sh ${iterations} ${podCount} "${strategyName}" ${mealyType} ${statisticsFileName} true ${deploymentFile}
+  source ./runners/run_experiment.sh ${iterations} ${podCount} "${strategyName}" ${mealyType} ${statisticsFileName} true ${deploymentFile}
 done
