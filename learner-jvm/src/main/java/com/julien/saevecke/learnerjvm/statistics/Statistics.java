@@ -8,9 +8,9 @@ public class Statistics {
     public long averageStartUpTime = 0;
     public long averageNextResponseTime = 0;
     public long averageBatchProcessingTime = 0;
-    public long averageBatchSize = 0;
+    public float averageBatchSize = 0;
     public long averageWaitTime = 0;
-    public long averageSequenceLength = 0;
+    public float averageSequenceLength = 0;
 
     public long maxWaitTime = 0;
     public long minWaitTime = Long.MAX_VALUE;
