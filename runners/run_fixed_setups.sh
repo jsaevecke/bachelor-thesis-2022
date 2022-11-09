@@ -17,5 +17,5 @@ do
   echo "strategy=${strategyName} - pods=${podCount}"
   echo "deployment file: ${deploymentFile}"
   echo "delay: 0 <-> 0"
-  source ./runners/run_experiment.sh ${iterations} ${podCount} "${strategyName}" ${mealyType} ${statisticsFileName} true ${deploymentFile}
+  source ./runners/run_experiment.sh 1 64 "fixed_p64_d0%0" coffee "statistics" false ./resources/deployment/graalvm/setups/fixed/deployment-16.yaml
 done
